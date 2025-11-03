@@ -17,14 +17,22 @@ class MinMaxScaler:
         X = np.array(X)
         self.min_ = np.min(X, axis=0)
         self.max_ = np.max(X, axis=0)
-        self.scale_ = (self.feature_max - self.feature_min) / (self.max_ - self.min_)
+
+        # Prevent division by zero for constant features
+        range_ = self.max_ - self.min_
+        # Use 1.0 for constant features (no scaling needed)
+        range_ = np.where(range_ == 0, 1.0, range_)
+
+        self.scale_ = (self.feature_max - self.feature_min) / range_
         self.is_fitted = True
         return self
 
     @check_fitter
     def transform(self, X):
         X = np.array(X)
-        X_std = (X - self.min_) * self.scale_
+        # Handle constant features properly
+        range_ = self.max_ - self.min_
+        X_std = np.where(range_ == 0, 0.0, (X - self.min_) * self.scale_)
         return X_std + self.feature_min
 
     def fit_transform(self, X, y=None):

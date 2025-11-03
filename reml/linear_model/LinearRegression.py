@@ -40,12 +40,30 @@ class LinearRegression:
             dw = (1.0 / n_samples) * (X.T @ error)
             db = (1.0 / n_samples) * np.sum(error)
 
-            # update
-            self.weights -= self.learning_rate * dw
-            self.bias -= self.learning_rate * db
+            # Clip gradients to prevent overflow
+            max_grad_norm = 1e6
+            dw = np.clip(dw, -max_grad_norm, max_grad_norm)
+            db = np.clip(db, -max_grad_norm, max_grad_norm)
 
-            # track half-MSE (matches gradient convention)
-            loss = 0.5 * np.mean(error**2)
+            # update with overflow protection
+            weight_update = self.learning_rate * dw
+            bias_update = self.learning_rate * db
+
+            # Check for potential overflow
+            if np.any(np.isnan(weight_update)) or np.any(np.isinf(weight_update)):
+                break
+            if np.isnan(bias_update) or np.isinf(bias_update):
+                break
+
+            self.weights -= weight_update
+            self.bias -= bias_update
+
+            # track half-MSE (matches gradient convention) with overflow protection
+            error_squared = error**2
+            if np.any(np.isinf(error_squared)) or np.any(np.isnan(error_squared)):
+                loss = np.inf
+            else:
+                loss = 0.5 * np.mean(error_squared)
             self.losses.append(loss)
 
         self.is_fitted = True

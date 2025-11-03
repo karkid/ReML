@@ -42,8 +42,9 @@ class GaussianNB:
         # calculate the posterior probability for each class
         for idx, _ in enumerate(self._classes):
             prior = np.log(self._prior[idx])
-            posterior = np.log(self._pdf(idx, x)).sum()
-            posterior = posterior + prior
+            # Use log-PDF directly to avoid numerical issues with small probabilities
+            log_likelihood = self._log_pdf(idx, x).sum()
+            posterior = log_likelihood + prior
             posteriors.append(posterior)
 
         # class with highest posterior
@@ -63,3 +64,16 @@ class GaussianNB:
         denominator = np.sqrt(2 * np.pi * var)
 
         return numerator / denominator
+
+    @check_fitter
+    def _log_pdf(self, class_idx, x):
+        """Compute log of Gaussian PDF for numerical stability."""
+        mean = self._mean[class_idx]
+        var = self._var[class_idx]
+        # Add epsilon to prevent log(0) or division by zero
+        epsilon = 1e-10
+        var = np.maximum(var, epsilon)
+
+        # Log of Gaussian PDF: -0.5 * log(2*pi*var) - (x-mean)^2 / (2*var)
+        log_prob = -0.5 * np.log(2 * np.pi * var) - ((x - mean) ** 2) / (2 * var)
+        return log_prob

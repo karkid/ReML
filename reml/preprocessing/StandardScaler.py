@@ -13,10 +13,20 @@ class StandardScaler:
 
     def fit(self, X, y=None):
         X = np.array(X)
-        self.mean_ = np.mean(X, axis=0)
-        self.std_ = np.std(X, axis=0, ddof=1)  # Using N-1 denominator
-        # Handle zeros in scale
-        self.scale_ = np.where(self.std_ == 0, 1.0, self.std_)
+        n_samples = X.shape[0]
+
+        # Suppress warnings for mean and std calculations on edge cases
+        with np.errstate(all="ignore"):
+            self.mean_ = np.mean(X, axis=0)
+
+            if n_samples <= 1:
+                # For single sample or empty data, std will be NaN or 0
+                self.std_ = np.std(X, axis=0, ddof=1)
+            else:
+                self.std_ = np.std(X, axis=0, ddof=1)
+
+        # Handle zeros and NaN in scale for transform method
+        self.scale_ = np.where((self.std_ == 0) | np.isnan(self.std_), 1.0, self.std_)
         self.is_fitted = True
         return self
 
