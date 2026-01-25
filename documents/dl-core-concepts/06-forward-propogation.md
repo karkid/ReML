@@ -4,8 +4,6 @@
 
 ## 1. What is Forward Propagation?
 
-### 📌 Definition
-
 **Forward propagation** is the process of passing input data **from the input layer → hidden layers → output layer** to generate a prediction.
 
 No learning happens here — the network just **uses current weights and biases**.
@@ -14,7 +12,7 @@ No learning happens here — the network just **uses current weights and biases*
 
 ## 2. Intuition (Very Important)
 
-### 🔍 Simple Intuition
+### Simple Intuition
 
 Think of forward propagation as:
 
@@ -33,13 +31,13 @@ Each layer:
 
 For each neuron:
 
-[
+$
 z = Wx + b
-]
+$
 
-[
+$
 a = f(z)
-]
+$
 
 Where:
 
@@ -60,7 +58,7 @@ This repeats layer by layer.
 * Receives feature vector
 * Passes values forward
 
-📌 Example:
+Example:
 
 ```
 x = [x1, x2, x3]
@@ -76,13 +74,15 @@ For each neuron:
 2. Add bias
 3. Apply activation
 
-📌 Example:
-[
+Example:
+
+$
 z_1 = w_1x_1 + w_2x_2 + b
-]
-[
+$
+
+$
 a_1 = ReLU(z_1)
-]
+$
 
 ---
 
@@ -97,7 +97,7 @@ Each layer uses output from previous layer as input.
 * Produces final prediction
 * Activation depends on task
 
-📌 Example:
+Example:
 
 * Sigmoid → probability
 * Softmax → class probabilities
@@ -123,14 +123,16 @@ b = 1
 ```
 
 Compute:
-[
+
+$
 z = (1×0.5) + (2×-1) + 1 = -0.5
-]
+$
 
 Apply Sigmoid:
-[
+
+$
 \hat{y} = \frac{1}{1 + e^{0.5}} ≈ 0.38
-]
+$
 
 ➡ Output = **0.38 probability**
 
@@ -159,7 +161,7 @@ Steps:
 5. Dense
 6. Output
 
-📌 Intuition:
+Intuition:
 
 * Gradually extract visual features
 
@@ -174,7 +176,7 @@ Steps:
 
 ## 7. Role of Activation Functions
 
-### 🔍 Intuition
+### Intuition
 
 Without activation functions:
 
@@ -193,13 +195,13 @@ Without activation functions:
 
 ## 8. Why Forward Propagation is Important
 
-### ✅ Pros
+### Pros
 
 * Produces predictions
 * Simple and deterministic
 * Essential for loss calculation
 
-### ❌ Cons
+### Cons
 
 * No learning by itself
 * Dependent on initial weights
@@ -209,7 +211,7 @@ Without activation functions:
 
 ## 9. When Forward Propagation is Used
 
-### 🕒 Used In:
+### Used In:
 
 * Training phase (before backpropagation)
 * Testing / inference
@@ -228,7 +230,7 @@ Without activation functions:
 
 ---
 
-## 11. Key Exam Points to Remember ⭐
+## 11. Key Exam Points to Remember
 
 * Forward propagation computes **network output**
 * Uses weights, bias, and activation functions
