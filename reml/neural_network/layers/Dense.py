@@ -1,16 +1,7 @@
 import numpy as np
 
 from .Layer import Layer
-
-
-def xavier_init(fan_in, fan_out):
-    limit = np.sqrt(6.0 / (fan_in + fan_out))
-    return np.random.uniform(-limit, limit, size=(fan_in, fan_out)).astype(np.float64)
-
-
-def he_init(fan_in, fan_out):
-    std = np.sqrt(2.0 / fan_in)
-    return np.random.randn(fan_in, fan_out).astype(np.float64) * std
+from reml.utils.resample import xavier_init, he_init
 
 
 class Dense(Layer):
